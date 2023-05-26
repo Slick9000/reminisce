@@ -39,6 +39,8 @@ async def on_message(msg):
 
             hook = discord.utils.get(await channel.webhooks(), name = m)
 
+            name = f"{msg.author.display_name} [{msg.guild.name}]"
+
             if hook:
                 
                 if msg.webhook_id:
@@ -52,7 +54,7 @@ async def on_message(msg):
                     await hook.send(
                         content    = msg.clean_content,
                         embeds     = send_embeds,
-                        username   = msg.author.display_name,
+                        username   = name,
                         avatar_url = msg.author.avatar
                     )
 
@@ -61,7 +63,7 @@ async def on_message(msg):
 
                     await hook.send(
                         content    = msg.clean_content,
-                        username   = msg.author.display_name,
+                        username   = name,
                         avatar_url = msg.author.avatar
                         )
                     
@@ -78,7 +80,7 @@ async def on_message(msg):
                     await hook.send(
                         content    = msg.clean_content,
                         file      = send_file,
-                        username   = msg.author.display_name,
+                        username   = name,
                         avatar_url = msg.author.avatar
                         )
         
