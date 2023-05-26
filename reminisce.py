@@ -40,14 +40,21 @@ async def on_message(msg):
             hook = discord.utils.get(await channel.webhooks(), name = m)
 
             if hook:
-
-                if msg.author == bot.user:
-
-                    return
-
+                
                 if msg.webhook_id:
 
                     return
+
+                if msg.embeds:
+
+                    send_embeds = list(msg.embeds)
+
+                    await hook.send(
+                        content    = msg.clean_content,
+                        embeds     = send_embeds,
+                        username   = msg.author.display_name,
+                        avatar_url = msg.author.avatar
+                    )
 
                 # no image
                 if msg.attachments == []:
