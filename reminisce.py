@@ -57,7 +57,7 @@ async def on_message(msg):
                     )
 
                 # no image
-                if msg.attachments == []:
+                elif msg.attachments == []:
 
                     await hook.send(
                         content    = msg.clean_content,
