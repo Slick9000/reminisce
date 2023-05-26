@@ -35,7 +35,7 @@ async def on_message(msg):
 
     for channel in channel_list:
 
-        if channel != msg.channel:
+        if msg.channel.name == m and channel != msg.channel:
 
             hook = discord.utils.get(await channel.webhooks(), name = m)
 
