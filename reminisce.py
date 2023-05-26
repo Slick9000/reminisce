@@ -9,7 +9,7 @@ intents.message_content = True
 
 intents.members = True
 
-bot = commands.Bot(command_prefix=">m ", intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix=">rem ", intents=intents, case_insensitive=True)
 
 bot.remove_command("help")
 
@@ -176,7 +176,7 @@ async def user(ctx, user_search):
 @bot.command()
 async def help(ctx):
 
-    db = discord.Embed(title=f"Setup", description="This is reminisce, another server reflection bot using webhooks. Type `>m enable` to setup and `>m disable` to undo setup.")
+    db = discord.Embed(title=f"Setup", description="This is reminisce, another server reflection bot using webhooks. Type `>rem enable` to setup and `>rem disable` to undo setup. >rem user will lookup a user (works by username, nickname, or id)")
     
     db.set_author(name=ctx.author, icon_url=ctx.author.avatar)
 
