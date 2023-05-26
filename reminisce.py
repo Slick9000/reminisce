@@ -7,6 +7,8 @@ intents = discord.Intents.default()
 
 intents.message_content = True
 
+intents.members = True
+
 bot = commands.Bot(command_prefix=">m ", intents=intents, case_insensitive=True)
 
 bot.remove_command("help")
@@ -123,12 +125,60 @@ async def disable(ctx):
 
         await ctx.send("not setup here!")
 
+# setup blacklist feature
+# 
+
+@bot.command()
+async def user(ctx, user_search):
+
+    try:
+
+        user = discord.utils.get(bot.get_all_members(), id=int(user_search))
+
+    except ValueError:
+
+        user = discord.utils.get(bot.get_all_members(), name=user_search)
+
+        if user == None:
+
+            for guild in bot.guilds:
+
+                for member in guild.members:
+
+                    if user_search == member.display_name:
+
+                        user = discord.utils.get(bot.get_all_members(), id=member.id)
+
+    db = discord.Embed(description="User Lookup")
+
+    db.set_author(name=user.display_name, icon_url=user.avatar)
+
+    db.add_field(name = "Username", value = user.name+user.discriminator)
+
+    db.add_field(name = "ID", value = user.id)
+
+    servers = []
+
+    for guild in bot.guilds:
+
+        for member in guild.members:
+
+            if user == member:
+
+                servers.append(guild.name)
+
+
+    db.add_field(name = "Servers", value = '\n'.join(str(x) for x in servers))
+
+    await ctx.send(embed=db)
+
+
 @bot.command()
 async def help(ctx):
 
     db = discord.Embed(title=f"Setup", description="This is reminisce, another server reflection bot using webhooks. Type `>m enable` to setup and `>m disable` to undo setup.")
     
-    db.set_author(name=f"{ctx.author}", icon_url=ctx.author.avatar)
+    db.set_author(name=ctx.author, icon_url=ctx.author.avatar)
 
     await ctx.send(embed=db)
 
