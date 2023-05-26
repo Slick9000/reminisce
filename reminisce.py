@@ -7,7 +7,7 @@ intents = discord.Intents.default()
 
 intents.message_content = True
 
-bot = commands.Bot(command_prefix=">", intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix=">m ", intents=intents, case_insensitive=True)
 
 bot.remove_command("help")
 
@@ -86,7 +86,7 @@ async def on_message(msg):
 
 
 @bot.command()
-async def setup(ctx):
+async def enable(ctx):
 
     hook = discord.utils.get(await ctx.channel.webhooks(), name = m)
     
@@ -105,7 +105,7 @@ async def setup(ctx):
         await ctx.send("mirror board created with webhook setup.")
 
 @bot.command()
-async def unsetup(ctx):
+async def disable(ctx):
 
     hook = discord.utils.get(await ctx.channel.webhooks(), name = m)
 
@@ -124,7 +124,7 @@ async def unsetup(ctx):
 @bot.command()
 async def help(ctx):
 
-    db = discord.Embed(title=f"Setup", description="This is reminisce, a server reflection bot using multiple webhooks to circumvent the ratelimit issues of the original. Type `>setup` to setup.")
+    db = discord.Embed(title=f"Setup", description="This is reminisce, a server reflection bot using multiple webhooks to circumvent the ratelimit issues of the original. Type `>m setup` to setup and `>m unsetup` to undo setup.")
     
     db.set_author(name=f"{ctx.author}", icon_url=ctx.author.avatar)
 
