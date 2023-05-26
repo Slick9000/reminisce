@@ -124,7 +124,7 @@ async def disable(ctx):
 @bot.command()
 async def help(ctx):
 
-    db = discord.Embed(title=f"Setup", description="This is reminisce, a server reflection bot using multiple webhooks to circumvent the ratelimit issues of the original. Type `>m setup` to setup and `>m unsetup` to undo setup.")
+    db = discord.Embed(title=f"Setup", description="This is reminisce, another server reflection bot using webhooks. Type `>m setup` to setup and `>m unsetup` to undo setup.")
     
     db.set_author(name=f"{ctx.author}", icon_url=ctx.author.avatar)
 
