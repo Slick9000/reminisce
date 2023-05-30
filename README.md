@@ -29,13 +29,13 @@ using the command without any given context will display your own statistics.
 
 the following commands are **administrator only.**
 
-`>blacklist (userid)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. a dm will be sent explaining the reason for their ban.
+`>blacklist (userid) (reason)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. a dm will be sent explaining the reason for their ban.
 
 using the command without any given context will display all banned users.
 
 `>unblacklist (userid)` (alias `>unbl`, `>unban`) will unban a user, allowing them to use the mirror channel again and removing them from the ban list.
 
-`>report (user)` allows a user to report someone else. this report will be sent to the bot owner for review who will determine if a ban is required.
+`>report (userid) (reason)` allows a user to report someone else. this report will be sent to the bot owner for review who will determine if a ban is required.
 
 `>help` will display help information
 
