@@ -61,11 +61,13 @@ async def on_message(msg):
 
                             user = discord.utils.get(bot.get_all_members(), name=msg.author.name)
 
-                            banned_embed = discord.Embed(title=f"Banned", description=f"**Reason:** {users[i]['reason']}")
+                            banned_embed = discord.Embed(title=f"You Are Banned!", description=f"**Reason:** {users[i]['reason']}")
 
                             banned_embed.add_field(name = "Username", value = user)
 
                             banned_embed.set_author(name=user.name, icon_url=user.avatar)
+
+                            banned_embed.set_footer(text="Contact admin for ban appeal.")
 
                             await user.send(embed=banned_embed)
 
@@ -414,9 +416,9 @@ async def blacklist(ctx, userid = None, *, reason = None):
 
                 for i in range(len(users)):
 
-                    banned += f"({i+1}) {users[i]['name']}\n"
+                    banned += f"[{i+1}] {users[i]['name']}\n"
 
-                    reasons += f"({i+1}) {users[i]['reason']}\n"
+                    reasons += f"[{i+1}] {users[i]['reason']}\n"
 
                 resp = discord.Embed(title=f"Blacklisted Users")
 
@@ -444,7 +446,15 @@ async def blacklist(ctx, userid = None, *, reason = None):
 
             else:
 
-                user = discord.utils.get(bot.get_all_members(), id=int(userid))
+                try:
+
+                    user = discord.utils.get(bot.get_all_members(), id=int(userid))
+
+                except ValueError:
+
+                    await ctx.send("Invalid User ID!")
+
+                    return
 
                 try:
                 
@@ -452,7 +462,7 @@ async def blacklist(ctx, userid = None, *, reason = None):
 
                 except AttributeError:
 
-                    await ctx.send("Invalid User ID.")
+                    await ctx.send("Invalid User ID!")
 
                     return
                 
@@ -469,8 +479,16 @@ async def blacklist(ctx, userid = None, *, reason = None):
             await ctx.send("Provide a User ID to populate the list! (No users blacklisted)")
 
             return
+        
+        try:
 
-        user = discord.utils.get(bot.get_all_members(), id=int(userid))
+            user = discord.utils.get(bot.get_all_members(), id=int(userid))
+
+        except ValueError:
+
+            await ctx.send("Invalid User ID!")
+
+            return
 
         try:
             
@@ -478,7 +496,7 @@ async def blacklist(ctx, userid = None, *, reason = None):
 
         except AttributeError:
 
-            await ctx.send("Invalid User ID.")
+            await ctx.send("Invalid User ID!")
 
             return
         
