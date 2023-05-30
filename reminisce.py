@@ -173,14 +173,16 @@ async def enable(ctx):
 
     **Webhook setup** will look the most natural - styled to look like regular Discord chats.
 
-    **IRC mode** styles in the internet relay mode of choice, as follows:
+    **IRC mode** styles in classic, text only style similar to the likes of 4chan.
 
-    [Username] [Server]: [message/attachments]
+    The image below is an example.
 
     Select **reaction 1** to use Webhooks.
     
     Select **option 2 to use IRC**. You can change this at any time.
     """)
+
+    selection.set_image(url="https://media.discordapp.net/attachments/440634457234341925/1112991175259996252/image.png?width=459&height=172")
 
     choice = await ctx.send(embed=selection)
 
