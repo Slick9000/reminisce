@@ -367,12 +367,20 @@ async def report(ctx, user_search = None, *, reason = None):
     
     else:
 
-        reported_user = discord.utils.get(bot.get_all_members(), id=int(user_search))
-    
-        if user == None:
+        try:
 
-            await ctx.send("User does not exist!")
-                
+            reported_user = discord.utils.get(bot.get_all_members(), id=int(user_search))
+            
+            if reported_user == None:
+
+                await ctx.send("User does not exist!")
+                        
+                return
+
+        except ValueError:
+
+            await ctx.send("Invalid User ID!")
+
             return
 
     report = discord.Embed(description="**Report**")
@@ -546,7 +554,7 @@ async def help(ctx):
 
     help.add_field(name = "General User Commands", value = """`>user` (alias `>userlookup`) will lookup a user (works by username, nickname, or id)
 
-    `>report (user) (reason)` will send a dm reporting the user to the administrator.
+    `>report (userid) (reason)` will send a dm reporting the user to the administrator.
     """)
     
     help.add_field(name = "Owner Commands", value = """Bot Owner Only Commands
