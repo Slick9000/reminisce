@@ -35,10 +35,12 @@ using the command without any given context will display all banned users.
 
 `>unblacklist (userid)` (alias `>unbl`, `>unban`) will unban a user, allowing them to use the mirror channel again and removing them from the ban list.
 
+`>report (user)` allows a user to report someone else. this report will be sent to the bot owner for review who will determine if a ban is required.
+
 `>help` will display help information
 
 ## extra notes
 - clean text. no @everyone pings between servers
-- reminisce has attachment support
 - reminisce does not mirror bots. this is partially due to the way it works altogether but doubles as a safety measure.
+- reminisce has attachment and embed support (though i don't think regular users can send embeds)
 - webhooks can be slow due to ratelimits. there's really no workaround for this besides potentially using multiple webhooks and switching when a ratelimit occurs, but that could be strange to setup and i have no interest in doing it
