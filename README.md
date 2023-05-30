@@ -42,4 +42,3 @@ using the command without any given context will display all banned users.
 - reminisce has attachment support
 - reminisce does not mirror bots. this is partially due to the way it works altogether but doubles as a safety measure.
 - webhooks can be slow due to ratelimits. there's really no workaround for this besides potentially using multiple webhooks and switching when a ratelimit occurs, but that could be strange to setup and i have no interest in doing it
-- 
