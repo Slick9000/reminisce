@@ -1,7 +1,9 @@
+import asyncio
 import discord
 from discord.ext import commands
-import asyncio
 from io import BytesIO
+import json
+import os
 
 intents = discord.Intents.default()
 
@@ -9,11 +11,13 @@ intents.message_content = True
 
 intents.members = True
 
-bot = commands.Bot(command_prefix=">rem ", intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix=">", intents=intents, case_insensitive=True)
 
 bot.remove_command("help")
 
 m = "mirror"
+
+blacklist_file = f"{os.path.dirname(os.path.abspath(__file__))}/blacklist.json"
 
 
 @bot.event
@@ -37,14 +41,46 @@ async def on_message(msg):
 
     for channel in channel_list:
 
+        if isinstance(msg.channel, discord.channel.DMChannel):
+            
+            return
+
         if msg.channel.name == m and channel != msg.channel:
+
+            if os.path.exists(blacklist_file):
+
+                with open(blacklist_file) as read_file:
+                
+                    data = json.load(read_file)
+
+                    users = data[0]['users']
+
+                    for i in range(len(users)):
+
+                        if str(msg.author.id) == users[i]['id']:
+
+                            user = discord.utils.get(bot.get_all_members(), name=msg.author.name)
+
+                            banned_embed = discord.Embed(title=f"Banned", description=f"**Reason:** {users[i]['reason']}")
+
+                            banned_embed.add_field(name = "Username", value = user)
+
+                            banned_embed.set_author(name=user.name, icon_url=user.avatar)
+
+                            await user.send(embed=banned_embed)
+
+                            return
 
             hook = discord.utils.get(await channel.webhooks(), name = m)
 
             name = f"{msg.author.display_name} [{msg.guild.name}]"
 
             if hook:
-                
+
+                if msg.author == bot.user:
+
+                        return
+                    
                 if msg.webhook_id:
 
                     return
@@ -60,7 +96,6 @@ async def on_message(msg):
                         avatar_url = msg.author.avatar
                     )
 
-                # no image
                 elif msg.attachments == []:
 
                     await hook.send(
@@ -85,102 +120,386 @@ async def on_message(msg):
                         username   = name,
                         avatar_url = msg.author.avatar
                         )
+                        
+            else:
+
+                if msg.author == bot.user:
+
+                    return
+                
+                if msg.webhook_id:
+
+                    return
+
+                if msg.embeds:
+
+                    send_embeds = list(msg.embeds)
+
+                    await channel.send(f"**{name}:** {msg.clean_content}", embeds = send_embeds)
+
+                elif msg.attachments == []:
+                    
+                    await channel.send(f"**{name}:** {msg.clean_content}")
+
+                else:
+
+                    fp = BytesIO()
+
+                    attachment = msg.attachments[0]
+
+                    await attachment.save(fp)
+                    
+                    send_file = discord.File(fp = fp, filename = attachment.filename)
+
+                    await channel.send(f"**{name}:** {msg.clean_content}", file = send_file)
         
     await bot.process_commands(msg)
 
 
-@bot.command()
+@bot.command(aliases=["setup"])
 async def enable(ctx):
 
-    hook = discord.utils.get(await ctx.channel.webhooks(), name = m)
+    reactions = ['1️⃣', '2️⃣']
     
-    if hook:
-        
-        await ctx.send("already setup!")
+    selection = discord.Embed(description="**Setup**")
+
+    selection.add_field(name = "Make a decision!", value = """Reminisce has two options - Webhook and IRC setup.
+
+    **Webhook setup** will look the most natural - styled to look like regular Discord chats.
+
+    **IRC mode** styles in the internet relay mode of choice, as follows:
+
+    [Username] [Server]: [message/attachments]
+
+    Select **reaction 1** to use Webhooks.
     
-    else:
-        
-        channel = await ctx.message.guild.create_text_channel(m)
-        
-        await channel.create_webhook(name = m)
-        
-        await ctx.send("webhook successfully created.") 
-    
-        await ctx.send("mirror board created with webhook setup.")
+    Select **option 2 to use IRC**. You can change this at any time.
+    """)
 
-@bot.command()
-async def disable(ctx):
+    choice = await ctx.send(embed=selection)
 
-    hook = discord.utils.get(await ctx.channel.webhooks(), name = m)
+    for option in reactions:
 
-    if hook:
+        await choice.add_reaction(option)
 
-        await ctx.send("shutting down in 5 seconds... thank you for using reminisce!")
+    def check(reaction, user):
 
-        await asyncio.sleep(5)
-    
-        await hook.channel.delete()
-
-    else:
-
-        await ctx.send("not setup here!")
-
-# setup blacklist feature
-# 
-
-@bot.command()
-async def user(ctx, user_search):
+        return user == ctx.author and str(reaction.emoji) in reactions
 
     try:
 
-        user = discord.utils.get(bot.get_all_members(), id=int(user_search))
+        reaction, user = await bot.wait_for('reaction_add', timeout=20.0, check=check)
 
-    except ValueError:
+    except asyncio.TimeoutError:
 
-        user = discord.utils.get(bot.get_all_members(), name=user_search)
+        await ctx.channel.send('Took too long to react, please try again!')
 
-        if user == None:
+    else:
 
-            for guild in bot.guilds:
+        await choice.clear_reactions()
 
-                for member in guild.members:
+        i = reactions.index(str(reaction))
 
-                    if user_search == member.display_name:
+        if i == 0:
 
-                        user = discord.utils.get(bot.get_all_members(), id=member.id)
+            hook = discord.utils.get(await ctx.channel.webhooks(), name = m)
+            
+            if hook:
+                
+                await ctx.send("Reminisce is already setup!")
+            
+            else:
+                
+                channel = await ctx.message.guild.create_text_channel(m)
 
-    db = discord.Embed(description="User Lookup")
+                await channel.edit(topic="**Help: >help**")
+                
+                await channel.create_webhook(name = m)
+                
+                await ctx.send("Webhook successfully created.") 
+            
+                await ctx.send("Mirror channel created with **webhook** setup.")
 
-    db.set_author(name=user.display_name, icon_url=user.avatar)
+        if i == 1:
 
-    db.add_field(name = "Username", value = user.name+user.discriminator)
+            channel = await ctx.message.guild.create_text_channel(m)
 
-    db.add_field(name = "ID", value = user.id)
+            await channel.edit(topic="**Help: >help**")
+
+            await ctx.send("Mirror channel created with **IRC** setup.")
+
+
+@bot.command(aliases=["unsetup"])
+async def disable(ctx):
+
+    channel = discord.utils.get(ctx.guild.channels, name = m)
+
+    if channel:
+
+        await ctx.send("Shutting down... thank you for using reminisce!")
+
+        await asyncio.sleep(2)
+    
+        await channel.delete()
+
+        await ctx.send("Reminisce has been shut down.")
+
+    else:
+
+        await ctx.send("Reminisce is not setup!")
+
+
+@bot.command()
+async def switch(ctx):
+
+    hook = discord.utils.get(await ctx.guild.webhooks(), name = m)
+
+    if hook:
+
+        await hook.delete()
+
+        await ctx.send("Reminisce has switched to **IRC** method!")
+
+    else:
+
+        channel = discord.utils.get(ctx.guild.channels, name = m)
+
+        await channel.create_webhook(name = m)
+
+        await ctx.send("Reminisce has switched to **Webhook** method!")
+
+
+@bot.command(aliases=["userlookup"])
+async def user(ctx, *, user_search = None):
 
     servers = []
 
+    nicknames = []
+
+    user_type = 0
+
+    if user_search == None:
+
+        user = discord.utils.get(bot.get_all_members(), name=ctx.author.name)
+    
+    else:
+
+        try:
+
+            user = discord.utils.get(bot.get_all_members(), id=int(user_search))
+
+        except ValueError:
+
+            user_type = 1
+
+            user = discord.utils.get(bot.get_all_members(), name=user_search)
+
+            if user == None:
+
+                for guild in bot.guilds:
+
+                    for member in guild.members:
+
+                        if user_search == member.nick:
+
+                            user = discord.utils.get(bot.get_all_members(), id=member.id)
+
+        if user == None:
+
+            await ctx.send("User does not exist!")
+                
+            return
+    
     for guild in bot.guilds:
 
         for member in guild.members:
 
             if user == member:
 
+                nicknames.append(member.nick)
+                
                 servers.append(guild.name)
 
+    user_info = discord.Embed(description="User Lookup")
 
-    db.add_field(name = "Servers", value = '\n'.join(str(x) for x in servers))
+    user_info.set_author(name=user.name if user_type == 0 else user_search, icon_url=user.avatar)
 
-    await ctx.send(embed=db)
+    user_info.add_field(name = "Username", value = user)
+
+    user_info.add_field(name = "Nicknames", value = '\n'.join(str(x) for x in nicknames))
+
+    user_info.add_field(name = "ID", value = user.id)
+
+    user_info.add_field(name = "Servers", value = '\n'.join(str(x) for x in servers))
+
+    await ctx.send(embed=user_info)
+
+
+@bot.command(aliases=["bl", "ban"])
+async def blacklist(ctx, userid = None, *, reason = None):
+
+    if os.path.exists(blacklist_file):
+
+        with open(blacklist_file) as read_file:
+        
+            data = json.load(read_file)
+
+            users = data[0]['users']
+
+            if userid == None:
+                
+                banned = ""
+
+                reasons = ""
+
+                for i in range(len(users)):
+
+                    banned += f"({i+1}) {users[i]['name']}\n"
+
+                    reasons += f"({i+1}) {users[i]['reason']}\n"
+
+                resp = discord.Embed(title=f"Blacklisted Users")
+
+                resp.add_field(name = "Users", value = banned)
+
+                resp.add_field(name = "Reasons", value = reasons)
+
+                await ctx.send(embed=resp)
+
+                return
+            
+            for i in range(len(users)):
+
+                if userid == users[i]['id']:
+
+                    user = discord.utils.get(bot.get_all_members(), id=int(userid))
+
+                    resp = discord.Embed(title=f"User **{user}** already blacklisted!", description=f"**Reason:** {users[i]['reason']}")
+                    
+                    resp.set_author(name=user.name, icon_url=user.avatar)
+
+                    await ctx.send(embed=resp)
+
+                    return
+
+            else:
+
+                user = discord.utils.get(bot.get_all_members(), id=int(userid))
+
+                try:
+                
+                    data[0]['users'].append({"id" : userid, "name": user.name, "reason": reason})
+
+                except AttributeError:
+
+                    await ctx.send("Invalid User ID.")
+
+                    return
+                
+                with open(blacklist_file, "w") as create_file:
+    
+                    json.dump(data, create_file, indent=4)
+
+                    await ctx.send(f"User {user} blacklisted!")
+
+    else:
+
+        if userid == None:
+
+            await ctx.send("Provide a User ID to populate the list! (No users blacklisted)")
+
+            return
+
+        user = discord.utils.get(bot.get_all_members(), id=int(userid))
+
+        try:
+            
+            add_user = [{"users": [{"id" : userid, "name": user.name, "reason": reason}]}]
+
+        except AttributeError:
+
+            await ctx.send("Invalid User ID.")
+
+            return
+        
+        with open(blacklist_file, "w") as create_file:
+        
+            json.dump(add_user, create_file, indent=4)
+
+        await ctx.send(f"User {user} blacklisted!")
+
+@bot.command(aliases=["unbl", "unban"])
+async def unblacklist(ctx, userid = None):
+
+    if os.path.exists(blacklist_file):
+
+        with open(blacklist_file) as read_file:
+        
+            data = json.load(read_file)
+
+            users = data[0]['users']
+
+            if userid == None:
+
+                await ctx.send("Please provide a User ID!")
+
+                return
+        
+            for i in range(len(users)):
+
+                if userid == users[i]['id']:
+
+                    data.pop(i)
+
+                    if data == []:
+
+                        read_file.close()
+
+                        os.remove(blacklist_file)
+
+                    else:
+
+                        with open(blacklist_file, "w") as create_file:
+        
+                            json.dump(data, create_file, indent=4)
+
+                    user = discord.utils.get(bot.get_all_members(), id=int(userid))
+
+                    resp = discord.Embed(title=f"User Unbanned", description=f"{user} has been unbanned!")
+                    
+                    resp.set_author(name=user.name, icon_url=user.avatar)
+
+                    await ctx.send(embed=resp)
+
+                    return
+                
+    else:
+
+        await ctx.send("No banned users!")
 
 
 @bot.command()
 async def help(ctx):
 
-    db = discord.Embed(title=f"Setup", description="This is reminisce, another server reflection bot using webhooks. Type `>rem enable` to setup and `>rem disable` to undo setup. >rem user will lookup a user (works by username, nickname, or id)")
+    help = discord.Embed(title=f"Help", description="""This is reminisce, another server mirroring bot using webhooks.
     
-    db.set_author(name=ctx.author, icon_url=ctx.author.avatar)
+    `>enable` (alias `>setup`) to setup. It will ask you whether you want webhook or IRC style, and you will select it with reaction 1️⃣ (webhook) or 2️⃣ (IRC)
+     
+    `>disable` (alias `>unsetup`) to undo setup.
 
-    await ctx.send(embed=db)
+    `>switch` automatically determines which style you use, and switches it if you desire.
+
+    `>user` (alias `>userlookup`) will lookup a user (works by username, nickname, or id)
+
+    `>blacklist (userid)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. 
+    A DM will be sent explaining the reason for their ban.
+    `>blacklist` by itself (without userid) will bring up the entire list of banned users.
+    
+    `>unblacklist` (alias `>unbl`, `>unban`) will unban a user, allowing them to use the mirror channel again and removing them from the ban list.
+    Have fun!
+    """)
+
+    await ctx.send(embed=help)
 
 
 token = open("token.txt").read()
