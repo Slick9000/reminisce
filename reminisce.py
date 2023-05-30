@@ -534,7 +534,8 @@ async def help(ctx):
 
     help = discord.Embed(title=f"Help", description="This is reminisce, another server mirroring bot using webhooks.")
     
-    help.add_field(name = "Server Admin Commands", value = """`>enable` (alias `>setup`) to setup. It will ask you whether you want webhook or IRC style, and you will select it with reaction 1️⃣ (webhook) or 2️⃣ (IRC)
+    help.add_field(name = "Server Admin Commands", value = """`>enable` (alias `>setup`) to setup. It will ask you whether you want webhook or IRC style, and you will select it with 
+    Reaction 1️⃣ (webhook) or 2️⃣ (IRC)
 
     `>disable` (alias `>unsetup`) to undo setup.
 
