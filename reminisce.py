@@ -159,6 +159,12 @@ async def on_message(msg):
 @bot.command(aliases=["setup"])
 async def enable(ctx):
 
+    if not ctx.message.author.guild_permissions.administrator:
+
+        await ctx.send("Only server admins can use this command.")
+
+        return
+
     reactions = ['1️⃣', '2️⃣']
     
     selection = discord.Embed(description="**Setup**")
@@ -232,6 +238,12 @@ async def enable(ctx):
 @bot.command(aliases=["unsetup"])
 async def disable(ctx):
 
+    if not ctx.message.author.guild_permissions.administrator:
+
+        await ctx.send("Only server admins can use this command.")
+
+        return
+
     channel = discord.utils.get(ctx.guild.channels, name = m)
 
     if channel:
@@ -249,8 +261,14 @@ async def disable(ctx):
         await ctx.send("Reminisce is not setup!")
 
 
-@bot.command()
+@bot.command(aliases=["swap"])
 async def switch(ctx):
+
+    if not ctx.message.author.guild_permissions.administrator:
+
+        await ctx.send("Only server admins can use this command.")
+
+        return
 
     hook = discord.utils.get(await ctx.guild.webhooks(), name = m)
 
@@ -336,6 +354,7 @@ async def user(ctx, *, user_search = None):
 
 
 @bot.command(aliases=["bl", "ban"])
+@commands.is_owner()
 async def blacklist(ctx, userid = None, *, reason = None):
 
     if os.path.exists(blacklist_file):
@@ -429,6 +448,7 @@ async def blacklist(ctx, userid = None, *, reason = None):
         await ctx.send(f"User {user} blacklisted!")
 
 @bot.command(aliases=["unbl", "unban"])
+@commands.is_owner()
 async def unblacklist(ctx, userid = None):
 
     if os.path.exists(blacklist_file):
@@ -487,15 +507,17 @@ async def help(ctx):
      
     `>disable` (alias `>unsetup`) to undo setup.
 
-    `>switch` automatically determines which style you use, and switches it if you desire.
+    `>switch` (alias `>swap`) automatically determines which style you use, and switches it if you desire.
 
     `>user` (alias `>userlookup`) will lookup a user (works by username, nickname, or id)
+
+    ADMIN ONLY COMMANDS
 
     `>blacklist (userid)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. 
     A DM will be sent explaining the reason for their ban.
     `>blacklist` by itself (without userid) will bring up the entire list of banned users.
     
-    `>unblacklist` (alias `>unbl`, `>unban`) will unban a user, allowing them to use the mirror channel again and removing them from the ban list.
+    `>unblacklist (userid)` (alias `>unbl`, `>unban`) will unban a user, allowing them to use the mirror channel again and removing them from the ban list.
     Have fun!
     """)
 
