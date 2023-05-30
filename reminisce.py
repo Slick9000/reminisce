@@ -353,6 +353,37 @@ async def user(ctx, *, user_search = None):
     await ctx.send(embed=user_info)
 
 
+@bot.command()
+async def report(ctx, user_search = None, *, reason = None):
+
+    #hardcoded my id as discord does not have a call to send to bot owner.
+    owner = discord.utils.get(bot.get_all_members(), id=357641367507435531)
+
+    if user_search == None:
+
+        await ctx.send("Please specify a user by ID! This can be found using `>user (name)`")
+    
+    else:
+
+        reported_user = discord.utils.get(bot.get_all_members(), id=int(user_search))
+    
+        if user == None:
+
+            await ctx.send("User does not exist!")
+                
+            return
+
+    report = discord.Embed(description="**Report**")
+
+    report.set_author(name=reported_user, icon_url = reported_user.avatar)
+
+    report.add_field(name = "Reason", value = reason)
+
+    report.add_field(name = "Submitted By", value = ctx.author)
+
+    await owner.send(embed = report)
+
+
 @bot.command(aliases=["bl", "ban"])
 @commands.is_owner()
 async def blacklist(ctx, userid = None, *, reason = None):
@@ -511,9 +542,11 @@ async def help(ctx):
 
     `>user` (alias `>userlookup`) will lookup a user (works by username, nickname, or id)
 
+    `>report (user) (reason)` will send a dm reporting the user to the administrator.
+
     ADMIN ONLY COMMANDS
 
-    `>blacklist (userid)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. 
+    `>blacklist (userid) (reason)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. 
     A DM will be sent explaining the reason for their ban.
     `>blacklist` by itself (without userid) will bring up the entire list of banned users.
     
