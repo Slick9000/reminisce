@@ -532,19 +532,21 @@ async def unblacklist(ctx, userid = None):
 @bot.command()
 async def help(ctx):
 
-    help = discord.Embed(title=f"Help", description="""This is reminisce, another server mirroring bot using webhooks.
+    help = discord.Embed(title=f"Help", description="This is reminisce, another server mirroring bot using webhooks.")
     
-    `>enable` (alias `>setup`) to setup. It will ask you whether you want webhook or IRC style, and you will select it with reaction 1️⃣ (webhook) or 2️⃣ (IRC)
-     
+    help.add_field(name = "Server Admin Commands", value = """`>enable` (alias `>setup`) to setup. It will ask you whether you want webhook or IRC style, and you will select it with reaction 1️⃣ (webhook) or 2️⃣ (IRC)
+
     `>disable` (alias `>unsetup`) to undo setup.
 
     `>switch` (alias `>swap`) automatically determines which style you use, and switches it if you desire.
+    """)
 
-    `>user` (alias `>userlookup`) will lookup a user (works by username, nickname, or id)
+    help.add_field(name = "General User Commands", value = """`>user` (alias `>userlookup`) will lookup a user (works by username, nickname, or id)
 
     `>report (user) (reason)` will send a dm reporting the user to the administrator.
-
-    ADMIN ONLY COMMANDS
+    """)
+    
+    help.add_field(name = "Owner Commands", value = """Bot Owner Only Commands
 
     `>blacklist (userid) (reason)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. 
     A DM will be sent explaining the reason for their ban.
