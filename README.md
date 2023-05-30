@@ -4,7 +4,7 @@ a reflect/mirror clone with the unique ability to select between webhook and irc
 ## what is this
 reminisce creates a channel mirroring/universal discord channel, sending the same messages to each server with the channel name `mirror`. 
 
-this was an idea from back in like 2019 by user hyarsan and i (originally called reflect), however an extremely efficient version was then made by my friend [superwhiskers](https://github.com/superwhiskers/mirror) in 2022.
+this was an idea from back in like 2019 by user [hyarsan](https://github.com/hyarsan) and i (originally called reflect), and an extremely efficient version was then made by my friend [superwhiskers](https://github.com/superwhiskers/mirror) in 2022.
 
 i decided to take back up this task for fun, and really push the idea as far as it can go
 
