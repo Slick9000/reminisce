@@ -154,8 +154,153 @@ async def on_message(msg):
                     send_file = discord.File(fp = fp, filename = attachment.filename)
 
                     await channel.send(f"**{name}:** {msg.clean_content}", file = send_file)
-        
+    
     await bot.process_commands(msg)
+
+@bot.event
+async def on_message_edit(msg_before, msg_after):
+
+    channel_list = []
+
+    for guild in bot.guilds:
+    
+        for channel in guild.text_channels:
+
+            if channel.name == m:
+    
+                channel_list.append(channel)
+
+    for channel in channel_list:
+
+        if isinstance(msg_after.channel, discord.channel.DMChannel):
+            
+            return
+
+        if msg_after.channel.name == m and channel != msg_after.channel:
+
+            if os.path.exists(blacklist_file):
+
+                with open(blacklist_file) as read_file:
+                
+                    data = json.load(read_file)
+
+                    users = data[0]['users']
+
+                    for i in range(len(users)):
+
+                        if str(msg_after.author.id) == users[i]['id']:
+
+                            user = discord.utils.get(bot.get_all_members(), name=msg_after.author.name)
+
+                            banned_embed = discord.Embed(title=f"You Are Banned!", description=f"**Reason:** {users[i]['reason']}")
+
+                            banned_embed.add_field(name = "Username", value = user)
+
+                            banned_embed.set_author(name=user.name, icon_url=user.avatar)
+
+                            banned_embed.set_footer(text="Contact admin for ban appeal.")
+
+                            await user.send(embed=banned_embed)
+
+                            return
+
+            hook = discord.utils.get(await channel.webhooks(), name = m)
+
+            name = f"{msg_after.author.display_name} [{msg_after.guild.name}]"
+
+            async for item in channel.history(limit=20):
+                    
+                if msg_before.content in item.content:
+
+                    if hook:
+
+                        if msg_after.embeds:
+
+                            send_embeds = list(msg_after.embeds)
+
+                            try:
+                                
+                                await hook.edit_message(
+                                    item.id,
+                                    content    = msg_after.clean_content,
+                                    embeds     = send_embeds,
+                                )
+
+                                return
+
+                            except discord.errors.NotFound:
+
+                                pass
+
+                        elif msg_after.attachments == []:
+
+                            try:
+                                
+                                await hook.edit_message(
+                                item.id,
+                                content    = msg_after.clean_content
+                                )
+
+                                return
+
+                            except discord.errors.NotFound:
+
+                                pass
+                            
+                        else:
+
+                            fp = BytesIO()
+
+                            attachment = msg_after.attachments[0]
+
+                            await attachment.save(fp)
+                            
+                            send_file = discord.File(fp = fp, filename = attachment.filename)
+
+                            try:
+                                
+                                await hook.edit_message(
+                                item.id,
+                                content    = msg_after.clean_content,
+                                file      = send_file
+                                )
+
+                                return
+
+                            except discord.errors.NotFound:
+
+                                pass
+                            
+                    else:
+
+                        if msg_after.embeds:
+
+                            send_embeds = list(msg_after.embeds)
+
+                            await item.edit(content=f"**{name}:** {msg_after.clean_content}", embeds = send_embeds)
+
+                            return
+
+                        elif msg_after.attachments == []:
+                            
+                            await item.edit(content=f"**{name}:** {msg_after.clean_content}")
+                            
+                            return
+
+                        else:
+
+                            fp = BytesIO()
+
+                            attachment = item.attachments[0]
+
+                            await attachment.save(fp)
+                            
+                            send_file = discord.File(fp = fp, filename = attachment.filename)
+
+                            await item.edit(content=f"**{name}:** {msg_after.clean_content}", file = send_file)
+
+                            return
+
 
 
 @bot.command(aliases=["setup"])
