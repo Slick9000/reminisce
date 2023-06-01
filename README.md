@@ -6,7 +6,7 @@ reminisce creates a channel mirroring/universal discord channel, sending the sam
 
 this was an idea from back in like 2019 by user [hyarsan](https://github.com/hyarsan) and i (originally called reflect), and an extremely efficient version was then made by my friend [superwhiskers](https://github.com/superwhiskers/mirror) in 2022.
 
-i decided to take back up this task for fun, and really push the idea as far as it can go
+i decided to take back up this task for fun and push it as far as possible, and i believe i have done so. reminisce will not be updated further
 
 ## how to use
 get python and `pip install discord.py`, and run reminisce.py
