@@ -258,7 +258,6 @@ async def on_message_edit(msg_before, msg_after):
                                 await hook.edit_message(
                                 item.id,
                                 content    = msg_after.clean_content,
-                                file      = send_file
                                 )
 
                                 return
