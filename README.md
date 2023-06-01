@@ -41,7 +41,7 @@ using the command without any given context will display all banned users.
 
 ## extra notes
 - clean text. no @everyone pings between servers
-- reminisce does not mirror bots. this is partially due to the way it works altogether but doubles as a safety measure.
-- reminisce has attachment and embed support (though i don't think regular users can send embeds)
-- there is the possibility of ratelimits and thus messages being delayed if many are sent at once. there's really no workaround for this, just the nature of sending several messages through one pipeline
-- i had planned to implement editing messages, but it seems like too much of a task to bother
+- message edits are mirrored! fix your spelling errors across all guilds
+- reminisce does not mirror bots (at the moment)
+- reminisce has attachment and embed support!
+- there is the possibility of ratelimits and thus messages being delayed if many are sent at once. there's really no workaround for this, just the nature of sending several messages through one pipeline. however, i have done all that i can to prevent this from happening
