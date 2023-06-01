@@ -8,6 +8,8 @@ this was an idea from back in like 2019 by user [hyarsan](https://github.com/hya
 
 i decided to take back up this task for fun and push it as far as possible, and i believe i have done so. reminisce will not be updated further
 
+it runs through the same bot as [r3ddit](https://github.com/Slick9000/r3dd1t), so you can invite it if you want [here](https://github.com/Slick9000/r3dd1t)
+
 ## how to use
 get python and `pip install discord.py`, and run reminisce.py
 
