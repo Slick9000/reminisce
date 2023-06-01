@@ -77,11 +77,11 @@ async def on_message(msg):
 
             name = f"{msg.author.display_name} [{msg.guild.name}]"
 
+            if msg.author == bot.user:
+
+                return
+
             if hook:
-
-                if msg.author == bot.user:
-
-                        return
                     
                 if msg.webhook_id:
 
@@ -124,10 +124,6 @@ async def on_message(msg):
                         )
                         
             else:
-
-                if msg.author == bot.user:
-
-                    return
                 
                 if msg.webhook_id:
 
