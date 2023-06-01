@@ -4,11 +4,18 @@ a reflect/mirror clone with the unique ability to select between webhook and irc
 ## what is this
 reminisce creates a channel mirroring/universal discord channel, sending the same messages to each server with the channel name `mirror`. 
 
-this was an idea from back in like 2019 by user [hyarsan](https://github.com/hyarsan) and i (originally called reflect), and an extremely efficient version was then made by my friend [superwhiskers](https://github.com/superwhiskers/mirror) in 2022.
+this was an idea from back in like 2019 by user [hyarsan](https://github.com/hyarsan) and i (originally called reflect) using webhooks, and an extremely efficient version was then made by my friend [superwhiskers](https://github.com/superwhiskers/mirror) in 2022 in an irc style.
 
-i decided to take back up this task for fun and push it as far as possible, and i believe i have done so. reminisce will not be updated further
+i decided to take back up this task for fun and push it as far as possible, and i believe i have done so, adding features such as having the ability to use both styles, the ability to mirror edited messages and a blacklist and report system. 
 
-it runs through the same bot as [r3ddit](https://github.com/Slick9000/r3dd1t), so you can invite it if you want [here](https://github.com/Slick9000/r3dd1t)
+## invite
+it runs through the same bot as [r3ddit](https://github.com/Slick9000/r3dd1t), so you can invite it if you want [here](https://discordapp.com/channels/422293824770146304/422311739028275210/695417594420658177)
+
+## ☕ donations
+
+while completely optional, it would be highly appreciated if you could donate if you like this bot! it can be of any amount.
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/irbee246)
 
 ## how to use
 get python and `pip install discord.py`, and run reminisce.py
