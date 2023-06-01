@@ -42,6 +42,6 @@ using the command without any given context will display all banned users.
 ## extra notes
 - clean text. no @everyone pings between servers
 - message edits are mirrored! fix your spelling errors across all guilds
-- reminisce does not mirror bots (at the moment)
+- reminisce does not mirror bots. this is a security measure, as well as a spam measure
 - reminisce has attachment and embed support!
 - there is the possibility of ratelimits and thus messages being delayed if many are sent at once. there's really no workaround for this, just the nature of sending several messages through one pipeline. however, i have done all that i can to prevent this from happening
