@@ -1,5 +1,5 @@
 # reminisce
-a reflect/mirror clone with the unique ability to select between webhook and irc style mirroring, indepedent for each guild.
+a discord channel mirroring service. link your servers together.
 
 ## what is this
 reminisce creates a channel mirroring/universal discord channel, sending the same messages to each server with the channel name `mirror`. 
