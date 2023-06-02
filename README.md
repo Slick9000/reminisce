@@ -20,6 +20,10 @@ while completely optional, it would be highly appreciated if you could donate if
 ## how to use
 get python and `pip install discord.py`, and run reminisce.py
 
+<br/>
+
+the following commands are **administrator only.**
+
 `>enable` (alias `>setup`) will explain the difference between the webhook and irc styling, and allow you to select which version you would want for your guild.
 
 this is indepedent for **every** guild, so if you prefer irc for simplicity reasons and your friend does not, you can use what you prefer without issue.
@@ -30,23 +34,27 @@ a channel called `mirror` will be created, and this will be the channel that sha
 
 `>switch` (alias `>swap`) automatically checks what style you are currently using and swaps to the other style.
 
+<br/>
+
+the following commands are **available to all users.**
+
 `>user` (alias `userlookup`) will look up any users in reminisce. lookups work by username, display name (nickname), or id, and will display the name, nicknames, id and servers the user is in.
 
 using the command without any given context will display your own statistics.
 
+`>report (userid) (reason)` allows a user to report someone else. this report will be sent to the bot owner for review who will determine if a ban is required.
+
+`>help` will display help information
+
 <br/>
 
-the following commands are **administrator only.**
+the following commands are **bot owner only.**
 
 `>blacklist (userid) (reason)` (alias `>bl`, `>ban`) will ban a user from using the mirror channel and add them to the ban list. a dm will be sent explaining the reason for their ban.
 
 using the command without any given context will display all banned users.
 
 `>unblacklist (userid)` (alias `>unbl`, `>unban`) will unban a user, allowing them to use the mirror channel again and removing them from the ban list.
-
-`>report (userid) (reason)` allows a user to report someone else. this report will be sent to the bot owner for review who will determine if a ban is required.
-
-`>help` will display help information
 
 ## extra notes
 - clean text. no @everyone pings between servers
