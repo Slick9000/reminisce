@@ -26,7 +26,7 @@ this is indepedent for **every** guild, so if you prefer irc for simplicity reas
 
 a channel called `mirror` will be created, and this will be the channel that shares the messages. another user would do the same enable command, and those servers become linked through that channel. reminisce does not listen to any other channels/log anything obviously (plus the code is there, check for yourself)
 
-`>disable`  (alias `>unsetup`) will delete the mirror channel, thus disabling reminisce. you could also disable it by editing the webhook name (webhook) or the channel name (irc), if you wanted to do it manually
+`>disable`  (alias `>unsetup`) will delete the mirror channel, thus disabling reminisce. you could also disable it by editing the the channel name manually.
 
 `>switch` (alias `>swap`) automatically checks what style you are currently using and swaps to the other style.
 
