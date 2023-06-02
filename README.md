@@ -9,7 +9,7 @@ this was an idea from back in like 2019 by user [hyarsan](https://github.com/hya
 i decided to take back up this task for fun and push it as far as possible, and i believe i have done so, adding features such as having the ability to use both styles, the ability to mirror edited messages and a blacklist and report system. 
 
 ## invite
-it runs through the same bot as [r3ddit](https://github.com/Slick9000/r3dd1t), so you can invite it if you want [here](https://discordapp.com/channels/422293824770146304/422311739028275210/695417594420658177)
+it runs through the same bot as [r3ddit](https://github.com/Slick9000/r3dd1t), so you can invite it if you want [here](https://discord.com/oauth2/authorize?client_id=459552609108230158&scope=bot&permissions=8)
 
 ## ☕ donations
 
