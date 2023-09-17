@@ -306,6 +306,14 @@ async def enable(ctx):
         await ctx.send("Only server admins can use this command.")
 
         return
+    
+    for channel in ctx.guild.channels:
+
+        if channel.name == m:
+
+            await ctx.send("Mirror channel already exists in this guild!")
+
+            return
 
     reactions = ['1️⃣', '2️⃣']
     
@@ -486,9 +494,9 @@ async def user(ctx, *, user_search = None):
 
     user_info.set_author(name=user.name if user_type == 0 else user_search, icon_url=user.avatar)
 
-    user_info.add_field(name = "Username", value = user)
+    user_info.add_field(name = "Username", value = user.name)
 
-    user_info.add_field(name = "Nicknames", value = '\n'.join(str(x) for x in nicknames))
+    user_info.add_field(name = "Nicknames", value = '\n'.join(str(x) for x in nicknames if x != None))
 
     user_info.add_field(name = "ID", value = user.id)
 
@@ -501,6 +509,7 @@ async def user(ctx, *, user_search = None):
 async def report(ctx, user_search = None, *, reason = None):
 
     #hardcoded my id as discord does not have a call to send to bot owner.
+    #if you wish to self host this, preferably change this to your id or it will be useless
     owner = discord.utils.get(bot.get_all_members(), id=357641367507435531)
 
     if user_search == None:
@@ -531,7 +540,7 @@ async def report(ctx, user_search = None, *, reason = None):
 
     report.add_field(name = "Reason", value = reason)
 
-    report.add_field(name = "Submitted By", value = ctx.author)
+    report.add_field(name = "Submitted By", value = ctx.author.name)
 
     await owner.send(embed = report)
 
@@ -646,6 +655,7 @@ async def blacklist(ctx, userid = None, *, reason = None):
 
         await ctx.send(f"User {user} blacklisted!")
 
+
 @bot.command(aliases=["unbl", "unban"])
 @commands.is_owner()
 async def unblacklist(ctx, userid = None):
@@ -726,6 +736,8 @@ async def help(ctx):
     """)
 
     await ctx.send(embed=help)
+
+
 
 
 token = open("token.txt").read()
