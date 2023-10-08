@@ -18,7 +18,9 @@ while completely optional, it would be highly appreciated if you could donate if
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/irbee246)
 
 ## how to use
-get python and `pip install discord.py`, and run reminisce.py
+get python and `pip install discord.py`, and run reminisce.py. be sure to place your token in the token.txt file
+
+if your fear that is too insecure, go ahead and add it to an environment variable and modify it
 
 <br/>
 
